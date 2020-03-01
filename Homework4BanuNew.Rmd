@@ -1,0 +1,379 @@
+---
+title: "Chapter 4 - Distributions of Random Variables"
+author: ""
+output:
+    pdf_document:
+        extra_dependencies: ["geometry", "multicol", "multirow"]
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+**Area under the curve, Part I**. (4.1, p. 142) What percent of a standard normal distribution $N(\mu=0, \sigma=1)$ is found in each region? Be sure to draw a graph.
+
+(a) $Z < -1.35$
+(b) $Z > 1.48$
+(c) $-0.4 < Z < 1.5$
+(d) $|Z| > 2$
+
+```{r chunk1}
+# use the DATA606::normalPlot function
+
+
+#0.08850799
+#Z < -1.35
+pnorm(-1.35, mean = 0, sd = 1, lower.tail=TRUE) 
+DATA606::normalPlot(mean=0, sd= 1, bounds = c(-50, -1.35),tails = FALSE)
+
+#Z > 1.48
+pnorm(1.48, mean = 0, sd = 1, lower.tail=FALSE) 
+DATA606::normalPlot(mean=0, sd= 1, bounds = c(1.48,100),tails = FALSE)
+
+#-0.4 < Z < 1.5
+DATA606::normalPlot(mean=0, sd= 1, bounds = c(-0.4,1.5),tails = FALSE)
+
+#|Z| > 2
+# Z > 2 
+# -Z > 2 (Z < -2)
+AREA1 <- pnorm(-2, mean = 0, sd = 1, lower.tail=TRUE) 
+AREA2 <- pnorm(2, mean = 0, sd = 1, lower.tail=FALSE)
+AREA1
+AREA2
+AREA1 + AREA2
+# OR 1 - AREA BETWEEN - 2 AND 2 (1-0.954)
+DATA606::normalPlot(mean=0, sd= 1, bounds = c (-2,2),tails = TRUE)
+
+
+```
+
+
+
+
+--------------------------------------------------------------------------------
+
+\clearpage
+
+**Triathlon times, Part I** (4.4, p. 142) In triathlons, it is common for racers to be placed into age and gender groups. Friends Leo and Mary both completed the Hermosa Beach Triathlon, where Leo competed in the *Men, Ages 30 - 34* group while Mary competed in the *Women, Ages 25 - 29* group. Leo completed the race in 1:22:28 (4948 seconds), while Mary completed the race in 1:31:53 (5513 seconds). Obviously Leo finished faster, but they are curious about how they did within their respective groups. Can you help them? Here is some information on the performance of their groups:
+
+* The finishing times of the \textit{Men, Ages 30 - 34} group has a mean of 4313 seconds with a standard deviation of 583 seconds.
+* The finishing times of the \textit{Women, Ages 25 - 29} group has a mean of 5261 seconds with a standard deviation of 807 seconds.
+* The distributions of finishing times for both groups are approximately Normal.
+
+Remember: a better performance corresponds to a faster finish.
+
+(a) Write down the short-hand for these two normal distributions.
+(b) What are the Z-scores for Leo's and Mary's finishing times? What do these Z-scores tell you?
+(c) Did Leo or Mary rank better in their respective groups? Explain your reasoning.
+(d) What percent of the triathletes did Leo finish faster than in his group?
+(e) What percent of the triathletes did Mary finish faster than in her group?
+(f) If the distributions of finishing times are not nearly normal, would your answers to parts (b) - (e) change? Explain your reasoning.
+
+
+
+(a) Write down the short-hand for these two normal distributions.
+```{r chunk2}
+
+#shorthand
+#Men N(mean = 4313,sd = 583)
+#Women: N(mean = 5261,sd = 807)			
+
+```
+
+
+(b) What are the Z-scores for Leo's and Mary's finishing times? 
+ANSWER : SEE BELOW
+
+What do these Z-scores tell you?
+
+The Z-score of an observation is the number of standard deviations it falls above or below the mean. 
+ANSWER : Leo scored 1.089194 standard deviations above the mean 			
+Mary scored 0.312268 standard deviations above the mean 			
+
+
+```{r chunk3}
+
+zLeo <- (4948 - 4313)/583	
+zMary <- (5513 - 5261)/807	
+'zLeo score is' 
+zLeo 
+'zMary score is' 
+zMary
+
+
+```
+
+
+(c) Did Leo or Mary rank better in their respective groups? Explain your reasoning. See ANSWER BELOW.
+#ANSWER: (37.7 percent) took greater time than Mary's. 
+For Leo (13.8 percent) took greater time than him. 
+Since far greater number of people took more time than Mary's she ranks better in her #group than comparitively with Leo in his group.
+
+```{r chunk4}
+
+
+#zLeo less than his z score , area under the curve
+'area undercurve for leo, scored less than him'
+pnorm(4948, mean = 4313, sd=583)
+'People who took more time than Leo ' 
+1-pnorm(4948, mean = 4313, sd=583)
+DATA606::normalPlot(mean=4313, sd= 583, bounds = c(4948,20000),tails = FALSE)
+
+#zMary less than her z score , area under the curve
+pnorm(5513, mean = 5261, sd=807)
+'People who took more time than Mary' 
+1-pnorm(5513, mean = 5261, sd=807)
+DATA606::normalPlot(mean=5261, sd= 807, bounds = c(5513,20000),tails = FALSE)
+
+
+```
+
+(d) What percent of the triathletes did Leo finish faster than in his group?
+
+ANSWER - Area under the curve is 13.8percent so these ppts took more time than Leo's time so he finished faster than them
+```{r chunk5}
+
+#zLeo HE'S FASTER
+DATA606::normalPlot(mean=4313, sd= 583, bounds = c(4948,20000),tails = FALSE)
+
+
+```
+
+
+(e) What percent of the triathletes did Mary finish faster than in her group?
+ANSWER : Area under the curve is 37.7percent so these ppts took more time than Mary's so she finished faster than them
+```{r chunk6}
+
+#zMary faster than this group
+DATA606::normalPlot(mean=5261, sd= 807, bounds = c(5513,20000),tails = FALSE)
+
+
+```
+
+(f) If the distributions of finishing times are not nearly normal, would your answers to parts (b)  (e) change? Explain your reasoning.
+
+Answer to part (b) would not change as Z-scores can be calculated for distributions that are not normal. 
+However, we could not answer parts (C)to(E) since we cannot use the normal probability table to calculate probabilities and percentiles without a normal model.
+
+
+
+
+
+--------------------------------------------------------------------------------
+
+\clearpage
+
+**Heights of female college students** Below are heights of 25 female college students.
+
+\[ \stackrel{1}{54}, \stackrel{2}{55}, \stackrel{3}{56}, \stackrel{4}{56}, 
+\stackrel{5}{57}, \stackrel{6}{58}, \stackrel{7}{58}, \stackrel{8}{59}, 
+\stackrel{9}{60}, \stackrel{10}{60}, \stackrel{11}{60}, \stackrel{12}{61}, 
+\stackrel{13}{61}, \stackrel{14}{62}, \stackrel{15}{62}, \stackrel{16}{63}, 
+\stackrel{17}{63}, \stackrel{18}{63}, \stackrel{19}{64}, \stackrel{20}{65}, 
+\stackrel{21}{65}, \stackrel{22}{67}, \stackrel{23}{67}, \stackrel{24}{69}, 
+\stackrel{25}{73} \]
+
+(a) The mean height is 61.52 inches with a standard deviation of 4.58 inches. Use this information to determine if the heights approximately follow the 68-95-99.7% Rule.
+(b) Do these data appear to follow a normal distribution? Explain your reasoning using the graphs provided below.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.show="hold", out.width="50%", fig.height=3}
+library(openintro)
+heights <- c(54, 55, 56, 56, 57, 58, 58, 59, 60, 60, 60, 61, 
+            61, 62, 62, 63, 63, 63, 64, 65, 65, 67, 67, 69, 73)
+par(mar=c(3.7,2.2,1,1), las=1, mgp=c(2.5,0.7,0), mfrow = c(1,1), cex.lab = 1.5, cex.axis = 1.5)
+histPlot(heights, col = COL[1], xlab = "Heights", ylab = "", probability = TRUE, axes = FALSE, ylim = c(0,0.085))
+axis(1)
+x <- heights
+xfit <- seq(min(x)-5, max(x)+5, length = 400)
+yfit <- dnorm(xfit, mean = mean(x), sd = sd(x))
+lines(xfit, yfit, col = COL[4], lwd = 2)
+par(mar=c(3.7,3.7,1,1), las=1, mgp=c(2.5,0.7,0), mfrow = c(1,1), cex.lab = 1.5, cex.axis = 1.5)
+qqnorm(heights, col = COL[1], pch = 19, main = "", axes = FALSE)
+axis(1)
+axis(2)
+qqline(heights, col = COL[1])
+```
+
+(a) The mean height is 61.52 inches with a standard deviation of 4.58 inches. Use this information to determine if the heights approximately follow the 68-95-99.7% Rule.
+
+ANSWER : The distribution does follow the rule since we confirmed the samples fall within each 1st,2nd and 3rd standard deviation using pnorm.
+
+```{r chunk7}
+
+heights <- c(54, 55, 56, 56, 57, 58, 58, 59, 60, 60, 60, 61, 
+            61, 62, 62, 63, 63, 63, 64, 65, 65, 67, 67, 69, 73)
+summary(heights)
+m.sam <- mean(heights)
+sd.sam <- sd(heights)
+m.sam 
+sd.sam
+
+
+sam1sd <- heights[heights >= m.sam - sd.sam & heights <= m.sam + sd.sam]
+length(heights)
+length(sam1sd)
+length(sam1sd)/length(heights)
+
+pnorm(61.52 + 4.58, mean=61.52, sd=4.58) - pnorm(61.52 - 4.58, mean=61.52, sd=4.58)
+
+sam2sd <- heights[heights >= m.sam - 2*sd.sam & heights <= m.sam + 2*sd.sam]
+length(sam2sd)
+length(sam2sd)/length(heights)
+
+pnorm(61.52 + 2*4.58, mean=61.52, sd=4.58) - pnorm(61.52 - 2*4.58, mean=61.52, sd=4.58)
+
+sam3sd <- heights[heights >= m.sam - 3* sd.sam & heights <= m.sam + 3 *sd.sam]
+sam3sd
+length(sam3sd)/length(heights)
+
+pnorm(61.52 + 3*4.58, mean=61.52, sd=4.58) - pnorm(61.52 - 3*4.58, mean=61.52, sd=4.58)
+
+DATA606::qqnormsim(heights)
+
+```
+(b) Do these data appear to follow a normal distribution? Explain your reasoning using the graphs provided below.
+
+ANSWER: The overlay of line shows a theoritical normal distribution over the histogram and seems it follows the normal distribution, however, the drop at 65 needs to be looked at since there is a cliff. 
+
+on the quantile plot, we need to see how far the points deviate from the line. In a true normal distribution the points have to be on the line, in this case the points seem to be right skewed at the tails but at the end some points are not on the line so we need to look at the deviation due to noise or there are not that many points to look at the variation, the sample size here is small.
+
+We can run a qqnormsim to simulate the sample on and then compare our real data quantile plot like a benchmark to the simulated data to see how the deviation happens. In this case, our simulations seem to sure more of an S curve so the deviations are more around the ends of the line. So, our original sample plot data seems to be falling more closer to the line so it is more likely a normal distribution.
+
+
+--------------------------------------------------------------------------------
+
+\clearpage
+
+**Defective rate.** (4.14, p. 148) A machine that produces a special type of transistor (a component of computers) has a 2% defective rate. The production is considered a random process where each transistor is independent of the others.
+
+(a) What is the probability that the 10th transistor produced is the first with a defect?
+```{r chunk8}
+#ANSWER : .016674
+#n=10
+#n-1 = 9
+#p (that a transister is defective) = .02
+panswer <- (1-.02)^9 * .02
+panswer
+
+
+```
+
+(b) What is the probability that the machine produces no defective transistors in a batch of 100?
+```{r chunk9}
+
+#P(no defective in 100 batch)
+
+pnodefect <- (1-.02)^100
+pnodefect
+
+
+```
+
+(c) On average, how many transistors would you expect to be produced before the first with a defect? What is the standard deviation?
+```{r chunk10}
+#mean is the no of trials needed before the first transistor is a defect
+
+meandefect <- 1/.02
+meandefect
+sd <- sqrt((1-.02)/(.02*.02))
+sd
+
+```
+
+(d) Another machine that also produces transistors has a 5% defective rate where each transistor
+is produced independent of the others. On average how many transistors would you expect to be produced with this machine before the first with a defect? What is the standard deviation?
+```{r chunk11}
+
+#mean is the no of trials needed before the first transistor is a defect
+
+meandefect5 <- 1/.05
+meandefect5
+sd <- sqrt((1-.05)/(.05*.05))
+sd
+
+```
+
+(e) Based on your answers to parts (c) and (d), how does increasing the probability of an event affect the mean and standard deviation of the wait time until success?(e) Based on your answers to parts (c) and (d), how does increasing the probability of an event affect the mean and standard deviation of the wait time until success?
+
+ANSWER : If the probability of a defective transistor is increased  (e.g. 0.05), then we don’t usually wait very long for a success  20 trials on average as opposed 50 (for.02). Consequently The standard deviation is also reduced as we wait shorter trails to see a defective transistor (19.49) trials in the case of .05 defective rate whereas in the case of .02 defective rate, we wait for (49.49) trials. 
+
+
+--------------------------------------------------------------------------------
+
+\clearpage
+
+**Male children.** While it is often assumed that the probabilities of having a boy or a girl are the same, the actual probability of having a boy is slightly higher at 0.51. Suppose a couple plans to have 3 kids.
+
+(a) Use the binomial model to calculate the probability that two of them will be boys.
+
+Suppose the probability of a single trial being a success is p. Then the probability of observing exactly k successes in n independent trials is given by
+
+```{r chunk12}
+
+#n=3, k = 2, p(boy) = 0.51, so solving for 
+#binomial formula we get (3*2*1/2*1*1) * (0.51)^2 *(1-0.51)^3-2
+
+pboystwo <- 3 * .51 * .51 * (1-0.51)
+pboystwo
+
+```
+
+
+(b) Write out all possible orderings of 3 children, 2 of whom are boys. Use these scenarios to calculate the same probability from part (a) but using the addition rule for disjoint outcomes. Confirm that your answers from parts (a) and (b) match.
+
+
+```{r chunk13}
+
+#single probability
+
+probabilityadd <- 0.51*0.51 * (1-0.51) + (0.51*0.51 * (1-0.51))+ (0.51*0.51 * (1-0.51))
+probabilityadd
+
+```
+
+(c) If we wanted to calculate the probability that a couple who plans to have 8 kids will have 3 boys, briefly describe why the approach from part (b) would be more tedious than the approach from part (a).
+
+The ﬁrst component of this equation is the number of ways to arrange the k = 3 successes among the n = 8 trials. The second component is the probability of any of the 8 (equally probable) scenarios.Using the formula we know that n choose k formula yields 56 possible combinations 8 factorial / 3 factorial * 5 factorial so this is a bit tedious to write out these combinations correctly. 
+
+
+
+
+
+
+--------------------------------------------------------------------------------
+
+\clearpage
+
+**Serving in volleyball.** (4.30, p. 162) A not-so-skilled volleyball player has a 15% chance of making the serve, which involves hitting the ball so it passes over the net on a trajectory such that it will land in the opposing team's court. Suppose that her serves are independent of each other.
+
+(a) What is the probability that on the 10th try she will make her 3rd successful serve? ANSWER IS using negative binomial formula of n-1 choose k-1 success and it is .0389.
+Fixing the last observation as a success, we look for ways to arrange the other obs and then find out probility using the negative formula.
+
+```{r chunk14}
+
+#p(making serve) = .15
+
+negativeprob <- (9*8/2) * .15^3 * (1-.15)^7 
+negativeprob 
+
+```
+
+(b) Suppose she has made two successful serves in nine attempts. What is the probability that her 10th serve will be successful?
+
+```{r chunk15}
+
+
+#10!/3!*7! * 0.15^3 * (1-.15)^7
+probbinom <- (10*3*4)* ((0.15)^3) * ((1-0.15)^7)
+probbinom
+
+#120*.003375*0.32057
+
+```
+
+(c) Even though parts (a) and (b) discuss the same scenario, the probabilities you calculated should be different. Can you explain the reason for this discrepancy?
+
+I used the binomial formula since -  Suppose the probability of a single trial being a success is p. Then the probability of observing exactly k successes in n independent trials is given by the binomial formula. Since we have already had 2 successes and we know that we will have the 3rd success in 10 trials we use the binomial formula to calculate the probability. For binomial we consider the # of successes. In negative binomial we examine how many trials it takes to observe a fixed number of successes and fix that the last observation is a success.
+
+
+
